@@ -193,6 +193,7 @@ export class YgoprodeckCardDatabase implements CardDatabase {
 				.then((rawSets) => {
 					for (const rawSet of rawSets) {
 						const set = mapCardSet(rawSet);
+						
 						this.#setsByName.set(set.name, set);
 					}
 

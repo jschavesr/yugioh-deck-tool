@@ -1,5 +1,5 @@
 <template>
-	<a :data-name="card.name" class="card" tabindex="0">
+	<a :data-name="card.name" :data-price="customPrice" class="card" tabindex="0">
 		<img
 			:alt="card.name"
 			:class="{ 'card__img--vertically-scaling': scaleVertically }"
@@ -12,7 +12,8 @@
 <script lang="ts">
 import type { PropType } from "vue";
 import { computed, defineComponent } from "vue";
-import type { Card } from "@/core/lib";
+import { DefaultVendor } from "@/core/lib";
+import { type Card } from "@/core/lib";
 import { resourceService } from "@/application/ctx";
 
 export default defineComponent({
@@ -35,8 +36,12 @@ export default defineComponent({
 				props.card.image?.urlSmall ??
 				resourceService.getPlaceholderCardImageUrl()
 		);
-
-		return { imgSrc };
+		const customPrice = computed<number>(
+			() => {
+				return props.card.prices.get(DefaultVendor.CUSTOM) || NaN;
+			}
+		);
+		return { imgSrc , customPrice};
 	},
 });
 </script>

@@ -23,10 +23,13 @@ export const DefaultVendor = {
 		id: "coolstuffinc",
 		currency: DefaultCurrency.USD,
 	},
+	CUSTOM: {
+		name: "Pesos: ",
+		id: "custom",
+		currency: DefaultCurrency.USD,
+	}
 } as const;
 
 export const DEFAULT_VENDOR_ARR: ReadonlyArray<Vendor> = [
-	DefaultVendor.CARD_MARKET,
-	DefaultVendor.TCG_PLAYER,
-	DefaultVendor.COOL_STUFF_INC,
+	DefaultVendor.CUSTOM,
 ];

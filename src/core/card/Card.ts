@@ -4,7 +4,7 @@ import type { CardType } from "./type/CardType";
 import type { Vendor } from "../price/Vendor";
 import type { BanState } from "./format/BanState";
 
-export type CardPrices = ReadonlyMap<Vendor, number>;
+export type CardPrices = Map<Vendor, number>;
 
 export interface CardImage {
 	readonly url: string;
@@ -66,6 +66,6 @@ export interface Card {
 	readonly banlist: BanlistInfo;
 
 	readonly image: CardImage | null;
-	readonly prices: CardPrices;
+	prices: CardPrices;
 	readonly views: number;
 }

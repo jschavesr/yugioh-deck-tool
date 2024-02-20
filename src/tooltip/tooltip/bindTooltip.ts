@@ -1,4 +1,4 @@
-import { Environment, getLogger } from "@/core/lib";
+import { DefaultVendor, Environment, getLogger } from "@/core/lib";
 import type { Instance } from "tippy.js";
 import { delegate } from "tippy.js";
 import type { TooltipInstance } from "../api";
@@ -20,19 +20,20 @@ const logger = getLogger("bindTooltip");
 const showTooltip = (
 	instance: Instance,
 	target: HTMLElement | HTMLAnchorElement,
-	cardKey: string
+	cardKey: string,
+	customPrice: number
 ): void => {
 	logger.trace(`Attempting to show tooltip for '${cardKey}'.`);
 	tooltipController
 		.loadCard(cardKey)
 		.then((card) => {
 			logger.trace("Loaded card.", card);
+			card.prices.set(DefaultVendor.CUSTOM, customPrice);
 			instance.setContent(createTooltipElement(card));
 
 			if (target instanceof HTMLAnchorElement) {
 				bindReferenceLink(target, card);
 			}
-
 			if (environmentConfig.getEnvironment() == Environment.YGOPRODECK) {
 				// Start request, but do not wait for it to finish.
 				ygoprodeckService
@@ -61,7 +62,8 @@ export const bindTooltipHandlers = (context: HTMLElement): TooltipInstance => {
 		onShow: (instance) => {
 			const target = instance.reference as HTMLElement;
 			const cardKey = target.dataset["name"]!;
-			showTooltip(instance, target, cardKey);
+			const customPrice = target.dataset["price"]! as unknown as number;
+			showTooltip(instance, target, cardKey, customPrice);
 		},
 	});
 

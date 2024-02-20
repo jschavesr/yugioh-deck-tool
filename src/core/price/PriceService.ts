@@ -1,11 +1,24 @@
 import type { Card } from "../card/Card";
 import type { Vendor } from "./Vendor";
 import type { Currency } from "./Currency";
+import { DefaultVendor } from "./Vendor";
 
 export interface PriceLookupResult {
 	readonly price: number;
 	readonly missing: ReadonlyArray<Card>;
 }
+
+const prices = 
+    {
+
+        "(C)": 1,
+        "(R)": 3,
+    "(SP)": 3,
+    "(SSP)": 3,
+    "(SR)": 5,
+    "(UR)": 7,
+    "(ScR)": 7,
+    };
 
 export class PriceService {
 	/**
@@ -33,6 +46,7 @@ export class PriceService {
 	getPrice(cards: ReadonlyArray<Card>, vendor: Vendor): PriceLookupResult {
 		let price = 0;
 		const missing: Card[] = [];
+		
 		for (const card of cards) {
 			if (card.prices.has(vendor)) {
 				const cardPrice = card.prices.get(vendor)!;
