@@ -1,0 +1,1 @@
+import{g as t,b as i}from"./assets/bindTooltip-wKoxc-Va.js";const o=t("tooltip"),e=()=>{window.yugiohDeckToolTooltip==null?(o.debug("Setting up card tooltip."),window.yugiohDeckToolTooltip=i(document.body)):o.debug("Tooltip instance exists, skipping setup.")};document.addEventListener("DOMContentLoaded",()=>e());
