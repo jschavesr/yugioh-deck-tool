@@ -8,6 +8,7 @@ import type { Format } from "./format/Format";
 import type { CardSet } from "./set/CardSet";
 import type { CardType } from "./type/CardType";
 import type { CardTypeCategory } from "./type/CardTypeCategory";
+import { DefaultVendor } from "../lib";
 
 export type CardFilter = Partial<{
 	/**
@@ -72,7 +73,18 @@ export class FilterService {
 	 * @return Filtered cards.
 	 */
 	filter(cards: ReadonlyArray<Card>, filter: CardFilter): Card[] {
-		return cards.filter((card) => {
+		const prices :{[key: string] : number} = 
+		{
+
+			"(C)": 1,
+			"(R)": 3,
+			"(SP)": 3,
+			"(SSP)": 3,
+			"(SR)": 5,
+			"(UR)": 7,
+			"(ScR)": 7,
+		};
+		const filteredCards : Card[] =  cards.filter((card) => {
 			if (
 				filter.customPredicates != null &&
 				!filter.customPredicates.every((predicate) => predicate(card))
@@ -157,17 +169,38 @@ export class FilterService {
 			) {
 				return false;
 			}
+			if (filter.sets === null || (filter.sets != null && filter.sets?.length< 1) ) {
+				return false;
+			}
 
 			if (
 				filter.sets != null &&
 				filter.sets.length > 0 &&
-				isEmpty(intersection(card.sets, filter.sets))
+				isEmpty(intersection(card.sets.map(set=>set.name), filter.sets.map(set => set.name)))
 			) {
 				return false;
 			}
 
 			return true;
 		});
+		if (filteredCards.length < 1000 ) {
+		filteredCards.forEach((card) => {
+			const setNames = filter.sets?.map( set => set.name );
+			// console.log("Card: ", card.name)
+			let price : number  = 1000; // bigger than any value in prices
+			card.sets?.forEach( (set) => {
+				// console.log(set.name);
+				// console.log(set.raririty_code);
+				if (setNames?.includes(set.name)) {
+					if (set.raririty_code === undefined) return;
+					price = Math.min(price, prices[set.raririty_code]);
+				}
+			})
+			if (price < 1000) card.prices.set(DefaultVendor.CUSTOM, price);
+		})
+		}
+		return filteredCards;
+		
 	}
 
 	/**

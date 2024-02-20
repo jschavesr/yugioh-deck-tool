@@ -128,9 +128,13 @@ const mapCardSets = (
 	rawCard: RawCard,
 	setsByName: ReadonlyMap<string, CardSet>
 ): CardSet[] => {
+	if (rawCard.name === "Beast Fangs")
+		console.log("MAPPING CAAAAAAAAAARD", rawCard.name);
+
 	if (rawCard.card_sets == null) {
 		return [];
 	}
+	
 	return rawCard.card_sets
 		.filter((rawSet) => {
 			if (!setsByName.has(rawSet.set_name)) {
@@ -139,7 +143,20 @@ const mapCardSets = (
 			}
 			return true;
 		})
-		.map((rawSet) => setsByName.get(rawSet.set_name)!);
+		.map((rawSet) => {
+
+			
+			let mappedSet = setsByName.get(rawSet.set_name)! ;
+			mappedSet.raririty_code = rawSet.set_rarity_code;
+			if (rawCard.name === "Beast Fangs") {
+				console.log("MAPPING");
+				console.log(rawSet.set_name)
+				console.log(rawSet.set_rarity_code)
+				console.log(rawSet.set_price)
+				console.log(mappedSet.raririty_code)
+			}
+			return {...mappedSet};
+		});
 };
 
 const mapImage = (rawCard: RawCard): CardImage | null => {

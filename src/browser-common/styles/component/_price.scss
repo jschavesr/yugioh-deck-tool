@@ -33,5 +33,9 @@
 			background-color: $color-vendor-coolstuffinc;
 			color: $black;
 		}
+
+		&--custom {
+			background-color: $color-vendor-custom;
+		}
 	}
 }
