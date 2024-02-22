@@ -29,7 +29,6 @@
 		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
 		"format": "prettier --write src/"
 	},
-	"homepage": "https://jschavesr.github.io/yugioh-deck-tool/",
 	"dependencies": {
 		"base64-js": "^1.5.1",
 		"bootstrap": "^4.6.1",
