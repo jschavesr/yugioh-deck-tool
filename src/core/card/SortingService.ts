@@ -2,6 +2,7 @@ import type { Card } from "./Card";
 import { CardTypeCategory } from "./type/CardTypeCategory";
 import type { CardDatabase } from "./CardDatabase";
 import { Format } from "./format/Format";
+import { DefaultVendor } from "../lib";
 
 export enum SortingStrategy {
 	/**
@@ -19,6 +20,7 @@ export enum SortingStrategy {
 
 	RELEASE_TCG = "Date: TCG",
 	RELEASE_OCG = "Date: OCG",
+	PRICE = "Price"
 }
 
 export enum SortingOrder {
@@ -79,9 +81,12 @@ export class SortingService {
 		}
 		if (strategy === SortingStrategy.VIEWS) {
 			return this.#createViewsComparator(order);
-		} else {
-			return this.#createDefaultComparator(order);
+		} 
+		if (strategy === SortingStrategy.PRICE) {
+			return this.#createPriceComparator(order);
 		}
+		return this.#createDefaultComparator(order);
+		
 	}
 
 	/**
@@ -140,6 +145,16 @@ export class SortingService {
 		return this.#createComparator((card) => card.views, order);
 	}
 
+	#createPriceComparator(order: SortingOrder) : Comparator<Card> {
+		const fallBackPrice = order == SortingOrder.ASC ? Infinity : 0;
+		const defaultCmp = this.#createDefaultComparator(order);
+		return (a : Card, b: Card) => {
+			const price_a = a.prices.get(DefaultVendor.CUSTOM) || fallBackPrice;
+			const price_b = b.prices.get(DefaultVendor.CUSTOM) || fallBackPrice;
+			if (price_a === price_b) return defaultCmp(a, b);
+			return (price_b - price_a) * this.#getOrderModifier(order);
+		} 
+	}
 	#createSortGroupComparator(order: SortingOrder): Comparator<Card> {
 		const orderModifier = this.#getOrderModifier(order) * -1;
 		return (a: Card, b: Card) =>

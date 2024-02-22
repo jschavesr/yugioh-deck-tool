@@ -6,7 +6,7 @@ import vue2 from "@vitejs/plugin-vue2";
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [vue2()],
-	base: "/yugioh-deck-tool/",
+	base : "/yugioh-deck-tool/",
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -27,23 +27,8 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			input: {
-				tooltip: "src/tooltip/main.ts", // Tooltip, can be used on its own.
-				app: "index.html", // Standalone and embeddable application.
-			},
-			output: {
-				// Remove hashes from file name for easier manual inclusion.
-				entryFileNames: "[name].js",
-				assetFileNames: (chunkInfo) => {
-					// use filenames consistent with entry point
-					if (chunkInfo.name == "main.css") {
-						return "tooltip.css";
-					}
-					if (chunkInfo.name == "index.css") {
-						return "app.css";
-					}
-
-					return "[name][extname]";
-				},
+				tooltip: "./src/tooltip/main.ts", // Tooltip, can be used on its own.
+				app: "./index.html", // Standalone and embeddable application.
 			},
 		},
 	},

@@ -24,7 +24,7 @@ export const DefaultVendor = {
 		currency: DefaultCurrency.USD,
 	},
 	CUSTOM: {
-		name: "Pesos: ",
+		name: "Pesos",
 		id: "custom",
 		currency: DefaultCurrency.USD,
 	}
