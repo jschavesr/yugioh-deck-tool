@@ -1,0 +1,1 @@
+async function i(o,t){const n=document.getElementById(o),e=document.getElementById(t);if(!(n.innerHTML.length<2)){if(console.log("bye"),!n||!e){console.log("Error: One or both elements not found.");return}e.innerHTML=n.innerHTML,n.innerHTML=""}}console.log("moviiiiiiiiiiing");i("rawTournament","targetTournament");
